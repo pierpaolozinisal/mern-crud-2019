@@ -1,7 +1,10 @@
-import React, { Component } from 'react'
-import axios from 'axios'
-import { format } from 'timeago.js'
-import { Link } from 'react-router-dom'
+import React, { Component } from "react";
+import axios from "axios";
+import { register } from "timeago.js";
+import TimeAgo from "timeago-react";
+import { Link } from "react-router-dom";
+
+register("it", require("timeago.js/lib/lang/it"));
 
 export default class NotesList extends Component {
 
@@ -24,7 +27,16 @@ export default class NotesList extends Component {
         await axios.delete('http://localhost:4000/api/notes/' + noteId);
         this.getNotes();
     }
-
+    
+    controlDate = mydate => {
+        const ahora = new Date();
+        const inDb = new Date(mydate);
+        if (inDb <=  ahora) {
+          return "softgray";
+        } else {
+          return "red";
+        }
+    }
     render() {
         return (
             <div className="row">
@@ -40,14 +52,14 @@ export default class NotesList extends Component {
                                     </Link>
                                 </div>
                                 <div className="card-body">
-                                    <p>
+                                    <p className="gray">
                                         {note.content}
                                     </p>
                                     <p>
-                                        Author: {note.author}
+                                        Author: <em>{note.author}</em>
                                     </p>
-                                    <p>
-                                        {format(note.createdAt)}
+                                    <p className={this.controlDate(note.date)}>
+                                        <TimeAgo datetime={note.date} locale="it" />
                                     </p>
                                 </div>
                                 <div className="card-footer">
