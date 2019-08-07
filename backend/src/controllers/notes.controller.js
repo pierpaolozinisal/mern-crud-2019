@@ -3,8 +3,14 @@ const notesCtrl = {};
 const Note = require('../models/Note');
 
 notesCtrl.getNotes = async (req, res) => {
-    const notes = await Note.find();
-    res.json(notes);
+    //Normal Version
+    //const notes = await Note.find();
+    //Modiefied version: sorting by date inserted by user
+    //Sort Asc = 1     Sort Desc= -1
+    const mysort= {date : 1};
+    //sorting the notes list by date
+    const notes = await Note.find().sort(mysort);
+    res.json(notes);;
 };
 
 notesCtrl.createNote = async (req, res) => {
